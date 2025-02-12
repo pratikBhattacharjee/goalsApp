@@ -1,5 +1,6 @@
 import {
   Button,
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
@@ -19,7 +20,10 @@ export default function App() {
   }
 
   function addGoalHandler() {
-    setCourseGoals((currentGoals) => [...currentGoals, enteredGoal]);
+    setCourseGoals((currentGoals) => [
+      ...currentGoals,
+      { text: enteredGoal, key: Math.random().toString() },
+    ]);
   }
 
   return (
@@ -33,14 +37,14 @@ export default function App() {
         <Button title="Add Goal" onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsContainer}>
-        <ScrollView>
-          <Text>List of goals...</Text>
-          {courseGoals.map((goal) => (
-            <View style={styles.goalItem} key={goal}>
-              <Text>{goal}</Text>
+        <FlatList
+          data={courseGoals}
+          renderItem={(itemData) => (
+            <View style={styles.goalItem}>
+              <Text>{itemData.item.text}</Text>
             </View>
-          ))}
-        </ScrollView>
+          )}
+        />
       </View>
     </View>
   );
@@ -69,7 +73,7 @@ const styles = StyleSheet.create({
     marginRight: "2%",
   },
   goalsContainer: {
-    flex: 5,
+    flex: 7,
   },
   goalItem: {
     padding: 10,
