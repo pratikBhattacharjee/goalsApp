@@ -1,49 +1,26 @@
-import {
-  Button,
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 
+import GoalInput from "./components/GoalInput.js";
+import GoalItem from "./components/GoalItem.js";
 import { useState } from "react";
 
 export default function App() {
-  const [enteredGoal, setEnteredGoal] = useState("");
   const [courseGoals, setCourseGoals] = useState([]);
 
-  function goalInputHandler(enteredText) {
-    setEnteredGoal(enteredText);
-  }
-
-  function addGoalHandler() {
+  function addGoalHandler(newGoalText) {
     setCourseGoals((currentGoals) => [
       ...currentGoals,
-      { text: enteredGoal, key: Math.random().toString() },
+      { text: newGoalText, key: Math.random().toString() },
     ]);
   }
 
   return (
     <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Your course goal"
-          onChangeText={goalInputHandler}
-        />
-        <Button title="Add Goal" onPress={addGoalHandler} />
-      </View>
+      <GoalInput addGoalHandler={addGoalHandler} />
       <View style={styles.goalsContainer}>
         <FlatList
           data={courseGoals}
-          renderItem={(itemData) => (
-            <View style={styles.goalItem}>
-              <Text>{itemData.item.text}</Text>
-            </View>
-          )}
+          renderItem={(itemData) => <GoalItem text={itemData.item.text} />}
         />
       </View>
     </View>
@@ -56,22 +33,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     flex: 1,
   },
-  inputContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "black",
-  },
-  textInput: {
-    borderColor: "black",
-    borderWidth: 1,
-    padding: 10,
-    width: "70%",
-    marginRight: "2%",
-  },
+
   goalsContainer: {
     flex: 7,
   },
